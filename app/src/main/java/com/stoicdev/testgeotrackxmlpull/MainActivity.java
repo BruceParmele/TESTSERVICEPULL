@@ -39,32 +39,47 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //Get reference to our ListView
-        studentList = (ListView)findViewById(R.id.studentList);
+        studentList = (ListView) findViewById(R.id.studentList);
+        sv = (SearchView) findViewById(R.id.searchView);
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+
+
+                mAdapter.getFilter().filter(text);
+                return false;
+            }
+        });
 
         //Set the click listener to launch the browser when a row is clicked.
         studentList.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View v, int pos,long id) {
+            public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
                 String subjectID = mAdapter.getItem(pos).getSubjectID();
                 //Intent i = new Intent(Intent.ACTION_VIEW);
                 Toast.makeText(getApplicationContext(), "ID is " + subjectID, Toast.LENGTH_LONG).show();
                 //i.setData(Uri.parse(url));
-               // startActivity(i);
+                // startActivity(i);
 
             }
 
         });
 
 		/*
-		 * If network is available download the xml from the Internet.
+         * If network is available download the xml from the Internet.
 		 * If not then try to use the local file from last time.
 		 */
-        if(isNetworkAvailable()){
+        if (isNetworkAvailable()) {
             Log.i("Stackstudent", "starting download Task");
             studentDownloadTask download = new studentDownloadTask();
             download.execute();
-        }else{
+        } else {
             mAdapter = new StudentAdapter(getApplicationContext(), -1, StudentXmlPullParser.getStackStudentFromFile(MainActivity.this));
             studentList.setAdapter(mAdapter);
         }
@@ -83,7 +98,7 @@ public class MainActivity extends Activity {
      * AsyncTask that will download the xml file for us and store it locally.
      * After the download is done we'll parse the local file.
      */
-    private class  studentDownloadTask extends AsyncTask<Void, Void, Void>{
+    private class studentDownloadTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... arg0) {
@@ -92,15 +107,15 @@ public class MainActivity extends Activity {
             BufferedReader reader = null;
 
 
-       try {
+            try {
 
-                 // Downloader.DownloadFromUrl("http://10.33.224.225/SQLWS.asmx/GetCalloutXML", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
+                // Downloader.DownloadFromUrl("http://10.33.224.225/SQLWS.asmx/GetCalloutXML", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
 
 
                 // Downloader.DownloadFromUrl("https://dl.dropboxusercontent.com/u/5724095/XmlParseExample/stacksites.xml", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
-               Downloader.DownloadFromUrl("http://10.33.224.225/SQLWS.asmx/GetCalloutXML", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
+                Downloader.DownloadFromUrl("http://10.33.224.225/SQLWS.asmx/GetCalloutXML", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
 
-            //   Downloader.DownloadFromUrl("http://10.33.224.225/GetCalloutXML.xml", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
+                //   Downloader.DownloadFromUrl("http://10.33.224.225/GetCalloutXML.xml", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -109,11 +124,11 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(Void result) {
             //setup our Adapter and set it to the ListView.
             mAdapter = new StudentAdapter(MainActivity.this, -1, StudentXmlPullParser.getStackStudentFromFile(MainActivity.this));
             studentList.setAdapter(mAdapter);
-            Log.i("Stackstudent", "adapter size = "+ mAdapter.getCount());
+            Log.i("Stackstudent", "adapter size = " + mAdapter.getCount());
         }
     }
 
