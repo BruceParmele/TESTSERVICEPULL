@@ -46,8 +46,6 @@ public class StudentAdapter extends ArrayAdapter<StackStudent> {
                 .cacheOnDisc()
                 .build();
     }
-
-
     /*
      * (non-Javadoc)
      * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)

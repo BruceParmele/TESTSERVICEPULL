@@ -22,11 +22,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
     private StudentAdapter mAdapter;
+    SearchView sv;
     private ListView studentList;
 
 
@@ -44,9 +46,9 @@ public class MainActivity extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int pos,long id) {
-                String url = mAdapter.getItem(pos).getSubjectID();
+                String subjectID = mAdapter.getItem(pos).getSubjectID();
                 //Intent i = new Intent(Intent.ACTION_VIEW);
-                Toast.makeText(getApplicationContext(), "ID is " + url, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "ID is " + subjectID, Toast.LENGTH_LONG).show();
                 //i.setData(Uri.parse(url));
                // startActivity(i);
 
@@ -89,56 +91,19 @@ public class MainActivity extends Activity {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
 
-            try {
-                URL url = new URL("http://10.33.224.225/SQLWS.asmx/GetCalloutXML");
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
 
-                InputStream stream = connection.getInputStream();
-
-                 reader = new BufferedReader(new InputStreamReader(stream));
-
-                StringBuffer buffer = new StringBuffer();
-                String line ="";
-                while((line = reader.readLine()) !=null){
-                    buffer.append(line);
-                }
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }finally {
-                if(connection != null) {
-                connection.disconnect();
-                }
-
-                try {
-                    if(reader != null) {
-                        reader.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-
-
-          /*  try {
-
-
+       try {
 
                  // Downloader.DownloadFromUrl("http://10.33.224.225/SQLWS.asmx/GetCalloutXML", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
 
 
                 // Downloader.DownloadFromUrl("https://dl.dropboxusercontent.com/u/5724095/XmlParseExample/stacksites.xml", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
-        //         Downloader.DownloadFromUrl("http://10.33.224.225/SQLWS.asmx/GetCalloutXML", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
+               Downloader.DownloadFromUrl("http://10.33.224.225/SQLWS.asmx/GetCalloutXML", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
 
-                Downloader.DownloadFromUrl("http://10.33.224.225/GetCalloutXML.xml", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
+            //   Downloader.DownloadFromUrl("http://10.33.224.225/GetCalloutXML.xml", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }*/
+            }
 
             return null;
         }

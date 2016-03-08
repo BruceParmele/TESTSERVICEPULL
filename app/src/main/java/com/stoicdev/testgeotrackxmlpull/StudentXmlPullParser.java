@@ -33,13 +33,6 @@ public class StudentXmlPullParser {
         // temp holder for current text value while parsing
         String curText = "";
 
-
-
-
-
-
-
-
         try {
             // Get our factory and PullParser
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -47,11 +40,6 @@ public class StudentXmlPullParser {
 
             // Open up InputStream and Reader of our file.
             FileInputStream fis = ctx.openFileInput("StackStudents.xml");
-
-
-
-
-
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
 
