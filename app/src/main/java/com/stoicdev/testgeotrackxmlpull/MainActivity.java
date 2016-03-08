@@ -1,6 +1,13 @@
 package com.stoicdev.testgeotrackxmlpull;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import android.app.Activity;
 import android.content.Context;
@@ -74,12 +81,54 @@ public class MainActivity extends Activity {
      * AsyncTask that will download the xml file for us and store it locally.
      * After the download is done we'll parse the local file.
      */
-    private class studentDownloadTask extends AsyncTask<Void, Void, Void>{
+    private class  studentDownloadTask extends AsyncTask<Void, Void, Void>{
 
         @Override
         protected Void doInBackground(Void... arg0) {
             //Download the file
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+
             try {
+                URL url = new URL("http://10.33.224.225/SQLWS.asmx/GetCalloutXML");
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+
+                 reader = new BufferedReader(new InputStreamReader(stream));
+
+                StringBuffer buffer = new StringBuffer();
+                String line ="";
+                while((line = reader.readLine()) !=null){
+                    buffer.append(line);
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                if(connection != null) {
+                connection.disconnect();
+                }
+
+                try {
+                    if(reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+
+          /*  try {
+
+
+
                  // Downloader.DownloadFromUrl("http://10.33.224.225/SQLWS.asmx/GetCalloutXML", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
 
 
@@ -89,7 +138,7 @@ public class MainActivity extends Activity {
                 Downloader.DownloadFromUrl("http://10.33.224.225/GetCalloutXML.xml", openFileOutput("StackStudents.xml", Context.MODE_PRIVATE));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             return null;
         }
