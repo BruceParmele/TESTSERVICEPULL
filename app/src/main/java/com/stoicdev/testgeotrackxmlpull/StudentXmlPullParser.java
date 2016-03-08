@@ -1,16 +1,16 @@
 package com.stoicdev.testgeotrackxmlpull;
 
 
+import android.content.Context;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import android.content.Context;
 
 public class StudentXmlPullParser {
 
